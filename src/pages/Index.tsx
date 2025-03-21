@@ -7,6 +7,7 @@ import { Projects } from "../components/Projects";
 import { Social } from "../components/Social";
 import { Contact } from "../components/Contact";
 import { Footer } from "../components/Footer";
+import { Freelancing } from "../components/Freelancing";
 
 const Index = () => {
   useEffect(() => {
@@ -26,6 +27,7 @@ const Index = () => {
         <Hero />
         <About />
         <Projects />
+        <Freelancing />
         <Social />
         <Contact />
       </main>

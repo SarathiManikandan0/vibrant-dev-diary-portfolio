@@ -4,11 +4,13 @@ import { useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ui/ThemeToggle";
+import { personalInfo } from "../lib/data";
 
 const navItems = [
   { name: "Home", path: "/" },
   { name: "About", path: "/#about" },
   { name: "Projects", path: "/#projects" },
+  { name: "Hire Me", path: "/#freelancing" },
   { name: "Contact", path: "/#contact" },
 ];
 
@@ -36,6 +38,23 @@ export function Header() {
     return location.hash === path.slice(1) || location.pathname === path;
   };
 
+  // Handle smooth scrolling for anchor links
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    // Only handle hash links
+    if (path.includes('#') && location.pathname === '/') {
+      e.preventDefault();
+      const targetId = path.split('#')[1];
+      const element = document.getElementById(targetId);
+      
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        
+        // Update URL without page reload
+        window.history.pushState(null, '', path);
+      }
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
@@ -56,8 +75,8 @@ export function Header() {
             transition={{ duration: 0.5 }}
             className="flex items-center"
           >
-            <span className="text-primary font-semibold">A</span>
-            <span className="ml-1">Johnson</span>
+            <span className="text-primary font-semibold">{personalInfo.name.charAt(0)}</span>
+            <span className="ml-1">{personalInfo.name.split(' ')[1]}</span>
           </motion.div>
         </Link>
 
@@ -72,6 +91,7 @@ export function Header() {
             >
               <Link
                 to={item.path}
+                onClick={(e) => handleNavClick(e, item.path)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   isActive(item.path)
                     ? "text-primary"
@@ -124,6 +144,7 @@ export function Header() {
                 >
                   <Link
                     to={item.path}
+                    onClick={(e) => handleNavClick(e, item.path)}
                     className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       isActive(item.path)
                         ? "bg-primary/10 text-primary"
@@ -141,5 +162,3 @@ export function Header() {
     </header>
   );
 }
-
-// Adding dependency for framer-motion

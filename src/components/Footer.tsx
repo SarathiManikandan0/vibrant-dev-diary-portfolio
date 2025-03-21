@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Github, Linkedin, Instagram } from "lucide-react";
 import { personalInfo, socialLinks } from "../lib/data";
 
 export function Footer() {
@@ -9,6 +9,13 @@ export function Footer() {
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  // Social media icon mapping
+  const iconMap: Record<string, JSX.Element> = {
+    GitHub: <Github size={20} />,
+    LinkedIn: <Linkedin size={20} />,
+    Instagram: <Instagram size={20} />
   };
 
   return (
@@ -45,12 +52,12 @@ export function Footer() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="p-2 rounded-full bg-secondary hover:bg-secondary/80 text-foreground transition-all hover:scale-110"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-3 rounded-full bg-secondary hover:bg-secondary/80 text-foreground transition-all"
                 aria-label={link.platform}
               >
-                <svg className="w-5 h-5">
-                  <use xlinkHref={`#${link.icon}`} />
-                </svg>
+                {iconMap[link.platform]}
               </motion.a>
             ))}
           </div>

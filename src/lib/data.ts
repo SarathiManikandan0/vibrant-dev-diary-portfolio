@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -204,12 +203,12 @@ export const socialLinks: SocialLink[] = [
 
 // Personal information
 export const personalInfo = {
-  name: "Sarathi M",
+  name: "Sarathi Manikandan",
   title: "Computer Science Student & Aspiring Team Lead",
   email: "sarathim1000@gmail.com",
   phone: "+919363480572",
   location: "Arakonam, TN 613003",
-  bio: "I'm Sarathi M, a logistics-focused Computer Science undergrad from Sathyabama University (CGPA: 8.05), passionate about tech innovation and leadership. With experience as a Machine Learning Intern at Rinex—where I led a team to boost efficiency by 60% using predictive models—and roles at Verzeo (Data Science) and HCL (MERN stack), I excel in operations, data analysis, and process improvement. My projects, like ZEN Care (AI mental health platform) and Resume Builder (LLM-powered), showcase my skills in Python, NLP, and full-stack development. I'm skilled in leadership, operations optimization, analytical problem-solving, and a range of technologies including Python, SQL, MERN stack, and cloud services.",
+  bio: "I'm Sarathi Manikandan, a Computer Science undergrad at Sathyabama University (CGPA: 8.05), passionate about tech and leadership.\nWith expertise in MERN stack, machine learning, and NLP, I've led projects like ZEN Care—an AI mental health platform—and built tools like a Resume Builder using LLMs.\nMy internships at Rinex, Verzeo, and HCL honed my skills in data analysis, process optimization, and full-stack development.\nI thrive under pressure, delivering innovative solutions with a creative edge.",
   resumeUrl: "/resume.pdf",
   profileImage: "/lovable-uploads/22556218-153f-4a3c-b08a-2b2274e5bc06.png"
 };
@@ -223,3 +222,10 @@ export const extracurricular = [
     description: "Led a team of 5 to build a blockchain voting system with Solidity and JavaScript, improving efficiency by 30%."
   }
 ];
+
+// New section for freelancing
+export const freelancing = {
+  title: "Let's Build Together",
+  description: "Available for freelancing or product development—reach out at 9363480572 for business inquiries.",
+  ctaText: "Contact Me"
+};
