@@ -1,7 +1,10 @@
 
 import { motion } from "framer-motion";
-import { personalInfo, skills, experiences, education } from "../lib/data";
+import { personalInfo, skills, experiences, education, socialLinks } from "../lib/data";
 import { useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { Link } from "react-router-dom";
+import { Github, Linkedin, Instagram } from "lucide-react";
 
 export function About() {
   const [activeTab, setActiveTab] = useState<"skills" | "experience" | "education">("skills");
@@ -9,6 +12,41 @@ export function About() {
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  // Social media icon mapping
+  const iconMap: Record<string, JSX.Element> = {
+    GitHub: <Github size={16} />,
+    LinkedIn: <Linkedin size={16} />,
+    Instagram: <Instagram size={16} />
+  };
+
+  // Function to render text with links
+  const renderBioWithLinks = (text: string) => {
+    let bioText = text;
+    
+    // For each social link, replace the URL with a linked version
+    socialLinks.forEach(link => {
+      const linkText = `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline inline-flex items-center gap-1">${link.platform} ${iconMap[link.platform]}</a>`;
+      bioText = bioText.replace(link.url, linkText);
+    });
+    
+    // Split by <a> tags to preserve them when setting innerHTML
+    const parts = bioText.split(/(<a.*?<\/a>)/);
+    
+    return (
+      <>
+        {parts.map((part, i) => {
+          if (part.startsWith('<a')) {
+            // This is a link, render it as HTML
+            return <span key={i} dangerouslySetInnerHTML={{ __html: part }} />;
+          } else {
+            // This is regular text
+            return <span key={i}>{part}</span>;
+          }
+        })}
+      </>
+    );
   };
 
   return (
@@ -24,9 +62,74 @@ export function About() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-8 rounded-full"></div>
-          <p className="max-w-3xl mx-auto text-lg text-muted-foreground">
-            {personalInfo.bio}
-          </p>
+        </motion.div>
+
+        {/* Profile Section */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          variants={fadeInUp}
+          className="mb-12 flex flex-col md:flex-row items-center gap-8 glass p-8 rounded-2xl"
+        >
+          <div className="w-32 h-32 md:w-48 md:h-48 relative flex-shrink-0">
+            <Avatar className="w-full h-full border-4 border-primary/20">
+              <AvatarImage 
+                src={personalInfo.profileImage}
+                alt={personalInfo.name}
+                className="object-cover"
+              />
+              <AvatarFallback className="text-lg font-bold">
+                {personalInfo.name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="flex-1">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-3 gap-2">
+              <div>
+                <h3 className="text-2xl font-bold">{personalInfo.name}</h3>
+                <p className="text-primary">{personalInfo.title}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {socialLinks.map((link) => (
+                  <motion.a
+                    key={link.platform}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-secondary/50 hover:bg-secondary/80 text-foreground transition-all"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {iconMap[link.platform]}
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <div className="px-3 py-1 bg-primary/10 rounded-full text-xs text-primary">
+                {personalInfo.location}
+              </div>
+              <div className="px-3 py-1 bg-primary/10 rounded-full text-xs text-primary">
+                {personalInfo.email}
+              </div>
+              <div className="px-3 py-1 bg-primary/10 rounded-full text-xs text-primary">
+                {personalInfo.phone}
+              </div>
+            </div>
+            <div className="text-muted-foreground mb-4 text-sm md:text-base">
+              {renderBioWithLinks(personalInfo.bio)}
+            </div>
+            <a 
+              href={personalInfo.resumeUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              Download Resume
+            </a>
+          </div>
         </motion.div>
         
         {/* Tabs */}
