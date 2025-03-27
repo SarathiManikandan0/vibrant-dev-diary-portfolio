@@ -1,77 +1,117 @@
 
-import { motion } from "framer-motion";
-import { ArrowUp, Github, Linkedin, Instagram } from "lucide-react";
-import { personalInfo, socialLinks } from "../lib/data";
+import { Link } from "react-router-dom";
+import { GitHub, Linkedin, Instagram, Heart } from "lucide-react";
 
-export function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  // Social media icon mapping
-  const iconMap: Record<string, JSX.Element> = {
-    GitHub: <Github size={20} />,
-    LinkedIn: <Linkedin size={20} />,
-    Instagram: <Instagram size={20} />
-  };
+export const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  
+  const socialLinks = [
+    {
+      name: "GitHub",
+      icon: <GitHub className="h-5 w-5" />,
+      url: "https://github.com/SarathiManikandan0"
+    },
+    {
+      name: "LinkedIn",
+      icon: <Linkedin className="h-5 w-5" />,
+      url: "https://www.linkedin.com/in/sarathi-manikandan/"
+    },
+    {
+      name: "Instagram",
+      icon: <Instagram className="h-5 w-5" />,
+      url: "https://www.instagram.com/sarathi_manikandan/"
+    }
+  ];
 
   return (
-    <footer className="py-10 bg-secondary/50 backdrop-blur-sm">
-      <div className="container">
-        <div className="flex flex-col items-center">
-          <div className="mb-6">
-            <button
-              onClick={scrollToTop}
-              className="p-3 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all hover:scale-110"
-              aria-label="Scroll to top"
-            >
-              <ArrowUp size={20} />
-            </button>
-          </div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-6"
-          >
-            <h3 className="text-2xl font-semibold mb-2">{personalInfo.name}</h3>
-            <p className="text-muted-foreground">{personalInfo.title}</p>
-          </motion.div>
-          
-          <div className="flex gap-4 mb-8">
-            {socialLinks.map((link, index) => (
-              <motion.a
-                key={link.platform}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-3 rounded-full bg-secondary hover:bg-secondary/80 text-foreground transition-all"
-                aria-label={link.platform}
-              >
-                {iconMap[link.platform]}
-              </motion.a>
-            ))}
-          </div>
-          
-          <div className="text-center text-sm text-muted-foreground">
-            <p className="mb-2">
-              © {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
+    <footer className="bg-muted/20 py-12">
+      <div className="container px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Sarathi Manikandan</h3>
+            <p className="text-muted-foreground mb-6">
+              Computer Science student and aspiring Team Lead focused on delivering innovative solutions with a creative edge.
             </p>
-            <p>
-              Designed and built with ❤️
-            </p>
+            <div className="flex items-center space-x-4">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200 transform hover:scale-110"
+                  aria-label={link.name}
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </div>
           </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/#about" className="text-muted-foreground hover:text-primary transition-colors">
+                  About Me
+                </Link>
+              </li>
+              <li>
+                <Link to="/#projects" className="text-muted-foreground hover:text-primary transition-colors">
+                  Projects
+                </Link>
+              </li>
+              <li>
+                <Link to="/#services" className="text-muted-foreground hover:text-primary transition-colors">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/#team" className="text-muted-foreground hover:text-primary transition-colors">
+                  Team
+                </Link>
+              </li>
+              <li>
+                <Link to="/#contact" className="text-muted-foreground hover:text-primary transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Services</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/book-project" className="text-muted-foreground hover:text-primary transition-colors">
+                  Book a Project
+                </Link>
+              </li>
+              <li>
+                <Link to="/training" className="text-muted-foreground hover:text-primary transition-colors">
+                  Request Training
+                </Link>
+              </li>
+              {!localStorage.getItem("supabase.auth.token") && (
+                <li>
+                  <Link to="/auth" className="text-muted-foreground hover:text-primary transition-colors">
+                    Client Login
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+        
+        <div className="mt-12 pt-6 border-t border-border text-center">
+          <p className="text-sm text-muted-foreground flex items-center justify-center">
+            © {currentYear} Sarathi Manikandan. All rights reserved. Designed and built with 
+            <Heart className="h-3 w-3 mx-1 text-red-500 inline" fill="currentColor" />
+          </p>
         </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

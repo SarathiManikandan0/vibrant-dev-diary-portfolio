@@ -9,7 +9,323 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      meetings: {
+        Row: {
+          client_id: string | null
+          created_at: string | null
+          description: string | null
+          duration: number | null
+          id: string
+          meeting_link: string | null
+          meeting_time: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          meeting_link?: string | null
+          meeting_time: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          meeting_link?: string | null
+          meeting_time?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          project_id: string | null
+          sender_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          project_id?: string | null
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          project_id?: string | null
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          role: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          role?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
+      project_assignments: {
+        Row: {
+          created_at: string | null
+          id: string
+          project_id: string | null
+          team_member_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          project_id?: string | null
+          team_member_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          project_id?: string | null
+          team_member_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_assignments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assignments_team_member_id_fkey"
+            columns: ["team_member_id"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          budget_range: string | null
+          client_id: string | null
+          created_at: string | null
+          deadline: string | null
+          description: string
+          file_urls: Json | null
+          id: string
+          requirements: string | null
+          status: string | null
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          budget_range?: string | null
+          client_id?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          description: string
+          file_urls?: Json | null
+          id?: string
+          requirements?: string | null
+          status?: string | null
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          budget_range?: string | null
+          client_id?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          description?: string
+          file_urls?: Json | null
+          id?: string
+          requirements?: string | null
+          status?: string | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_approved: boolean | null
+          project_name: string | null
+          rating: number | null
+          reviewer_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_approved?: boolean | null
+          project_name?: string | null
+          rating?: number | null
+          reviewer_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_approved?: boolean | null
+          project_name?: string | null
+          rating?: number | null
+          reviewer_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string
+          id: string
+          image_url: string | null
+          price_range: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description: string
+          id?: string
+          image_url?: string | null
+          price_range?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          image_url?: string | null
+          price_range?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          id: string
+          name: string
+          role: string
+          social_links: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          name: string
+          role: string
+          social_links?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          role?: string
+          social_links?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      training_requests: {
+        Row: {
+          availability: Json | null
+          client_id: string | null
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          status: string | null
+          topic: string
+          updated_at: string | null
+        }
+        Insert: {
+          availability?: Json | null
+          client_id?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          status?: string | null
+          topic: string
+          updated_at?: string | null
+        }
+        Update: {
+          availability?: Json | null
+          client_id?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          status?: string | null
+          topic?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

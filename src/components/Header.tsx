@@ -1,164 +1,155 @@
 
 import { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { ThemeToggle } from "./ui/ThemeToggle";
-import { personalInfo } from "../lib/data";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { useAuth } from "@/hooks/use-auth";
+import { useMobile } from "@/hooks/use-mobile";
 
-const navItems = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/#about" },
-  { name: "Projects", path: "/#projects" },
-  { name: "Hire Me", path: "/#freelancing" },
-  { name: "Contact", path: "/#contact" },
-];
-
-export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export const Header = () => {
   const location = useLocation();
+  const { user, signOut } = useAuth();
+  const isMobile = useMobile();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  
+  const isHomePage = location.pathname === "/";
+
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY > 10);
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when navigating
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
-
-  const isActive = (path: string) => {
-    if (path === "/") return location.pathname === "/" && !location.hash;
-    return location.hash === path.slice(1) || location.pathname === path;
-  };
-
-  // Handle smooth scrolling for anchor links
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
-    // Only handle hash links
-    if (path.includes('#') && location.pathname === '/') {
-      e.preventDefault();
-      const targetId = path.split('#')[1];
-      const element = document.getElementById(targetId);
-      
+  const scrollToSection = (section: string) => {
+    if (isHomePage) {
+      const element = document.getElementById(section);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        
-        // Update URL without page reload
-        window.history.pushState(null, '', path);
+        element.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      window.location.href = `/#${section}`;
     }
+    setIsMobileNavOpen(false);
   };
+
+  // Links configuration
+  const navLinks = [
+    { name: "About", id: "about" },
+    { name: "Projects", id: "projects" },
+    { name: "Services", id: "services" },
+    { name: "Team", id: "team" },
+    { name: "Contact", id: "contact" }
+  ];
 
   return (
-    <header
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "backdrop-blur-xl py-4 bg-background/80 shadow-soft"
-          : "py-6 bg-transparent"
-      }`}
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`fixed top-0 left-0 right-0 z-50 py-4 ${
+        isScrolled ? "bg-background shadow-md" : "bg-background/80 backdrop-blur-md"
+      } transition-all duration-300`}
     >
       <div className="container flex items-center justify-between">
-        <Link
-          to="/"
-          className="text-xl font-medium tracking-tight transition-colors hover:text-primary"
-        >
-          <span className="sr-only">Home</span>
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center"
-          >
-            <span className="text-primary font-semibold">{personalInfo.name.charAt(0)}</span>
-            <span className="ml-1">{personalInfo.name.split(' ')[1]}</span>
-          </motion.div>
+        <Link to="/" className="text-xl font-bold">
+          Sarathi Manikandan
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
-          {navItems.map((item, index) => (
-            <motion.div
-              key={item.name}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Link
-                to={item.path}
-                onClick={(e) => handleNavClick(e, item.path)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  isActive(item.path)
-                    ? "text-primary"
-                    : "text-foreground/80 hover:text-foreground"
-                }`}
-              >
-                {item.name}
-              </Link>
-            </motion.div>
-          ))}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: navItems.length * 0.1 }}
-          >
-            <ThemeToggle />
-          </motion.div>
-        </nav>
-
-        {/* Mobile Navigation Toggle */}
-        <div className="flex items-center md:hidden">
-          <ThemeToggle />
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="ml-2 p-2 rounded-full bg-secondary/80 text-foreground"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-background/95 backdrop-blur-xl border-t border-border/50"
-          >
-            <div className="container py-4 flex flex-col space-y-2">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Link
-                    to={item.path}
-                    onClick={(e) => handleNavClick(e, item.path)}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                      isActive(item.path)
-                        ? "bg-primary/10 text-primary"
-                        : "hover:bg-secondary"
-                    }`}
+        {isMobile ? (
+          <Sheet open={isMobileNavOpen} onOpenChange={setIsMobileNavOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[250px] sm:w-[300px]">
+              <nav className="flex flex-col gap-4 mt-8">
+                {navLinks.map((link) => (
+                  <button
+                    key={link.id}
+                    onClick={() => scrollToSection(link.id)}
+                    className="px-4 py-2 text-left hover:text-primary transition-colors"
                   >
-                    {item.name}
+                    {link.name}
+                  </button>
+                ))}
+                
+                <div className="h-px bg-border my-2" />
+                
+                {user ? (
+                  <>
+                    <Link 
+                      to="/dashboard" 
+                      className="px-4 py-2 text-left hover:text-primary transition-colors"
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => signOut()}
+                      className="px-4 py-2 text-left hover:text-primary transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <Link 
+                    to="/auth" 
+                    className="px-4 py-2 text-left hover:text-primary transition-colors"
+                  >
+                    Sign In
                   </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                )}
+                
+                <div className="mt-auto flex items-center justify-between pt-4">
+                  <ThemeToggle />
+                </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        ) : (
+          <nav className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollToSection(link.id)}
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                {link.name}
+              </button>
+            ))}
+            
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Link 
+                  to="/dashboard" 
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Button variant="ghost" onClick={() => signOut()}>
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <Link to="/auth">
+                <Button variant="default">Sign In</Button>
+              </Link>
+            )}
+            
+            <ThemeToggle />
+          </nav>
         )}
-      </AnimatePresence>
-    </header>
+      </div>
+    </motion.header>
   );
-}
+};
+
+export default Header;

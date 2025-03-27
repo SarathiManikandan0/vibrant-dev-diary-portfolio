@@ -8,6 +8,9 @@ import { Social } from "../components/Social";
 import { Contact } from "../components/Contact";
 import { Footer } from "../components/Footer";
 import { Freelancing } from "../components/Freelancing";
+import { Services } from "../components/Services";
+import { Team } from "../components/Team";
+import { Reviews } from "../components/Reviews";
 
 const Index = () => {
   useEffect(() => {
@@ -27,6 +30,9 @@ const Index = () => {
         <Hero />
         <About />
         <Projects />
+        <Services />
+        <Team />
+        <Reviews />
         <Freelancing />
         <Social />
         <Contact />
