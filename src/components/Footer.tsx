@@ -1,6 +1,5 @@
-
 import { Link } from "react-router-dom";
-import { GitHub, Linkedin, Instagram, Heart } from "lucide-react";
+import { Github, Linkedin, Instagram, Heart } from "lucide-react";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -8,7 +7,7 @@ export const Footer = () => {
   const socialLinks = [
     {
       name: "GitHub",
-      icon: <GitHub className="h-5 w-5" />,
+      icon: <Github className="h-5 w-5" />,
       url: "https://github.com/SarathiManikandan0"
     },
     {

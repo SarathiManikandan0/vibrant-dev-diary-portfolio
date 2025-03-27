@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
-import { GitHub, Linkedin, Instagram } from "lucide-react";
+import { Github, Linkedin, Instagram } from "lucide-react";
 
 interface TeamMember {
   id: string;
@@ -11,11 +10,9 @@ interface TeamMember {
   role: string;
   bio: string;
   avatar_url: string;
-  social_links?: {
-    github?: string;
-    linkedin?: string;
-    instagram?: string;
-  };
+  social_links?: any;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export const Team = () => {
@@ -34,7 +31,7 @@ export const Team = () => {
           throw error;
         }
 
-        setTeamMembers(data || []);
+        setTeamMembers(data as TeamMember[]);
       } catch (error) {
         console.error("Error fetching team members:", error);
       } finally {
@@ -143,7 +140,7 @@ export const Team = () => {
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-primary transition-colors"
                           >
-                            <GitHub className="h-5 w-5" />
+                            <Github className="h-5 w-5" />
                           </a>
                         )}
                         {socialLinks.linkedin && (

@@ -11,9 +11,11 @@ interface Service {
   id: string;
   title: string;
   description: string;
-  category: "software" | "hardware" | "training";
+  category: string;  // Changed from strict union type to string
   price_range: string;
   image_url?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const getCategoryIcon = (category: string) => {
@@ -45,7 +47,8 @@ export const Services = () => {
           throw error;
         }
 
-        setServices(data || []);
+        // Cast the data to Service[] to ensure correct typing
+        setServices(data as Service[]);
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
